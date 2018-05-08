@@ -44,6 +44,9 @@ The tables were created as such:
 The data was added with this method:
 
 Note: at line 36 one can just change the filename to one of the other three to add them to the database as well.
+
+Note_2: to do as this you need to have your csv files in the same dir as the notebook file like this:
+![dir_showcase](https://github.com/Thug-Lyfe/database_ass_10/blob/master/dir.png "dir")
 ```python
 import csv
 import psycopg2
