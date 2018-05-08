@@ -215,7 +215,9 @@ plt.text(64,77,'cyan=upper\ngreen=below\nred=try',fontsize=12)
 plt.plot(us_try_x,us_try_y,'rp',us_below_x,us_below_y,'gp',us_upper_x,us_upper_y,'cp',)
 plt.show()
 ```
-And they look like this: where green is below secondary level, cyan is above secondary level and red is tertiary level education.
+And they look like this: 
+
+Where green is below secondary level, cyan is above secondary level and red is tertiary level education.
 
 The x axis is the percentage of adults at that level of education
 
