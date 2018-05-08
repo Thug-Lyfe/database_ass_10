@@ -149,7 +149,7 @@ order by "Growth rate" desc
 limit 2;
 ```
 
-For plotting I first needed the tietary, below secondary and above secondary education percentage numbers, with coresponding lifeexpectancy numbers. All of which i define to be used later like this:
+For plotting I first needed the tertiary, below secondary and above secondary education percentage numbers, with coresponding lifeexpectancy numbers. All of which i define to be used later like this:
 
 Note: I used usa instead of china, even though it had less growth, this was done as china only had one year where they published their education records, which would make for a boring plot...
 ```python
@@ -213,7 +213,11 @@ plt.text(64,77,'cyan=upper\ngreen=below\nred=try',fontsize=12)
 plt.plot(us_try_x,us_try_y,'rp',us_below_x,us_below_y,'gp',us_upper_x,us_upper_y,'cp',)
 plt.show()
 ```
-And they look like this:
+And they look like this: where green is below secondary level, cyan is above secondary level and red is tertiary level education.
+
+The x axis is the percentage of adults at that level of education
+
+The y axis is the life expectancy.
 
 ![plot_iceland](https://github.com/Thug-Lyfe/database_ass_10/blob/master/iceland.png "iceland plot")
 ![plot_usa](https://github.com/Thug-Lyfe/database_ass_10/blob/master/usa.png "usa plot")
