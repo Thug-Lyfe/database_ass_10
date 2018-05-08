@@ -10,15 +10,15 @@ I wrote the logical data model with as little redudancy as possible, with 8 tabl
 7. indicator (id (PK),indicator)
 8. value (id (PK),value,locationID,subjectID,frequencyID,measureID,flakID,timeID,indicatorID)
 
-it can be seen visually as: 
+Tt can be seen visually as: 
 
 ![data_sketch](https://github.com/Thug-Lyfe/database_ass_10/blob/master/data2.jpg "logical data model sketch")
 
-or more pleasing xD  
+Or more aesthetically pleasing xD  
 
 ![data_final](https://github.com/Thug-Lyfe/database_ass_10/blob/master/data1.jpg "logical data model")
 
-the tables were created as such:
+The tables were created as such:
 
 ```python
 %sql create table subject(id serial primary key,subject varchar(100) unique);
@@ -41,9 +41,9 @@ the tables were created as such:
                          constraint uni_tup unique (measureID, timeID, subjectID,flakID,locationID,indicatorID));
 ```
 
-the data was added with this method:
+The data was added with this method:
 
-note: at line 36 one can just change the filename to one of the other three to add them to the database as well.
+Note: at line 36 one can just change the filename to one of the other three to add them to the database as well.
 ```python
 import csv
 import psycopg2
@@ -130,7 +130,7 @@ with open('lifeexpectancy.csv', 'r') as f:
 
 The growth rate was found with this method: the worst growth rate can be found by changing the order to asc instead of desc
 
-note: we exclude id 43,44,42,49 in our case as this is, OECD, OECDE, EU28, EA19 as these are not countries
+Note: we exclude id 43,44,42,49 in our case as this is, OECD, OECDE, EU28, EA19 as these are not countries
 ```python
 %%sql select location.location,sum(value) as value_sum,count(value) as value_co, ((max(value) - min(value)) / count(value))  as "Growth rate" from value
 join location on (location.id = locationID)
@@ -143,6 +143,8 @@ limit 2;
 ```
 
 For plotting I first needed the tietary, below secondary and above secondary education percentage numbers, with coresponding lifeexpectancy numbers. All of which i define to be used later like this:
+
+Note: I used usa instead of china, even though it had less growth, this was done as china only had one year where they published their education records, which would make for a boring plot...
 ```python
 usa_try = %sql select value as "try",lifeexp from value join location on (location.id = locationID) join subject on (subject.id = subjectID) join (select timeID,value as lifeexp from value where indicatorID = 3 AND subjectID = 1 AND locationID = 30) as lifeexp on (lifeexp.timeID = value.timeID) join time on (time.id = value.timeid) where location like 'USA' AND subject like 'TRY'
 usa_below = %sql select value as "below",lifeexp from value join location on (location.id = locationID) join subject on (subject.id = subjectID) join (select timeID,value as lifeexp from value where indicatorID = 3 AND subjectID = 1 AND locationID = 30) as lifeexp on (lifeexp.timeID = value.timeID) join time on (time.id = value.timeid) where location like 'USA' AND subject like 'BUPPSRY'
@@ -152,7 +154,7 @@ isl_below = %sql select value as "below",lifeexp from value join location on (lo
 isl_upper = %sql select value as "upper",lifeexp from value join location on (location.id = locationID) join subject on (subject.id = subjectID) join (select timeID,value as lifeexp from value where indicatorID = 3 AND subjectID = 1 AND locationID = 30) as lifeexp on (lifeexp.timeID = value.timeID) join time on (time.id = value.timeid) where location like 'ISL' AND subject like 'UPPSRY'
 ```
 
-the plots can then be made like this:
+The plots can then be made like this:
 ```python
 us1 = pandas.DataFrame(usa_try, columns=['try', 'lifeexp'])
 us2 = pandas.DataFrame(usa_below, columns=['below', 'lifeexp'])
@@ -211,8 +213,9 @@ plt.text(64,77,'cyan=upper\ngreen=below\nred=try',fontsize=12)
 plt.plot(us_try_x,us_try_y,'rp',us_below_x,us_below_y,'gp',us_upper_x,us_upper_y,'cp',)
 plt.show()
 ```
-and they look like this:
+And they look like this:
 
-![data_final](https://github.com/Thug-Lyfe/database_ass_10/blob/master/data1.jpg "logical data model")
+![plot_iceland](https://github.com/Thug-Lyfe/database_ass_10/blob/master/iceland.png "iceland plot")
+![plot_usa](https://github.com/Thug-Lyfe/database_ass_10/blob/master/usa.png "usa plot")
 
 
