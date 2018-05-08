@@ -10,7 +10,7 @@ I wrote the logical data model with as little redudancy as possible, with 8 tabl
 7. indicator (id (PK),indicator)
 8. value (id (PK),value,locationID,subjectID,frequencyID,measureID,flakID,timeID,indicatorID)
 
-Tt can be seen visually as: 
+It can be seen visually as: 
 
 ![data_sketch](https://github.com/Thug-Lyfe/database_ass_10/blob/master/data2.jpg "logical data model sketch")
 
@@ -128,9 +128,13 @@ with open('lifeexpectancy.csv', 'r') as f:
         conn.commit()
 ```
 
-The growth rate was found with this method: the worst growth rate can be found by changing the order to asc instead of desc
+The growth rate was found with this method: 
 
-Note: we exclude id 43,44,42,49 in our case as this is, OECD, OECDE, EU28, EA19 as these are not countries
+Note: The worst growth rate can be found by changing the order to asc instead of desc
+
+Note_2: We exclude locationID 43,44,42,49 in our case as this is, OECD, OECDE, EU28, EA19 as these are not countries
+
+Note_3: The best growth is China and the lowest is Iceland (low capita sucks)
 ```python
 %%sql select location.location,sum(value) as value_sum,count(value) as value_co, ((max(value) - min(value)) / count(value))  as "Growth rate" from value
 join location on (location.id = locationID)
@@ -156,13 +160,6 @@ isl_upper = %sql select value as "upper",lifeexp from value join location on (lo
 
 The plots can then be made like this:
 ```python
-us1 = pandas.DataFrame(usa_try, columns=['try', 'lifeexp'])
-us2 = pandas.DataFrame(usa_below, columns=['below', 'lifeexp'])
-us3 = pandas.DataFrame(usa_upper, columns=['upper', 'lifeexp'])
-us1=us1.astype(float)
-us2=us2.astype(float)
-us3=us3.astype(float)
-
 us_try_x = []
 us_try_y = []
 for ele in usa_try:
@@ -217,5 +214,9 @@ And they look like this:
 
 ![plot_iceland](https://github.com/Thug-Lyfe/database_ass_10/blob/master/iceland.png "iceland plot")
 ![plot_usa](https://github.com/Thug-Lyfe/database_ass_10/blob/master/usa.png "usa plot")
+
+From this it can be hypothesized that when ones living standard is generally higher, then one tend to stay longer in school.
+
+This is not to be confused with the hypothesi that people who have higher education live longer. As this would need a correlation between the age of people and their education level at death, instead of a nation wide life expectancy and general education level at that a particular year. Though it has been shown in other studies that it is true, you cannot use this data to do the same.
 
 
